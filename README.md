@@ -4,6 +4,7 @@
 
 ## General Algorithm
 
+0. Select Data
 1. Independent Component Analysis (ICA)
 2. Empirical Mode Decomposition (EMD) Filtering
 3. Segmentation
@@ -25,50 +26,59 @@
 
 ### 3. Segmentation
 
-We generate create feature vectors out of "segments" of a signal. These segments are defined as.. 
-
-![findpeaks](./Images/time-0-500.png)
+We generate create feature vectors out of "segments" of a signal. These segments are defined in [1].
 
 
 ### 4. Morphological Features
 
+*Contributes a total of 100 features per segment.* 50 from each trough and 50 from each crest.
+
 ![Source 2, Segment 127, Morphological Feature](./Images/src2_morph_seg127.png)
 
-Contributes a total of 100 features per segment. 
 
 ### 5. FWPT Features
 
-Contributes a total of 510 features per segment. 
+*Contributes a total of 510 features per segment.* 
 
 ## resp_classifier.m
 
 ### 6. Support Vector Machine (SVM)
 
-.
+Used 2nd-order polynomial kernel. 
 
 ### 7. Evaluation 
 
-.
-
+For 100 iterations, obtained mean test accuracy of 95.817073 percent.
 
 ## Helper Functions
 
-### ICA
+### ICA/
 
 We used the ICA process implemented earlier this semester. [Link to code.](https://github.com/gustybear-research/x96_multi_moda_p_verf_osa/tree/main/ICA_analysis)
 
-### EMD
+### EMD/
 
 We used the EMD process implemented earlier this semester. [Link to code.](https://github.com/davidvliang/emd-analysis)
 
-### Intersections
+### intersections/
 
-[Link to MATLAB documentation here.](https://www.mathworks.com/matlabcentral/fileexchange/11837-fast-and-robust-curve-intersections)
+Computes the (x,y) locations where two curves intersect. Used to compute the widths at each heigh Ht_p for each trough and Hc_p for each crest. [Link to MATLAB documentation here.](https://www.mathworks.com/matlabcentral/fileexchange/11837-fast-and-robust-curve-intersections)
 
-### getmswpfeat
+### getmswpfeat/
 
 Implemented in [1]. Detailed discussion in [2]. [Beginner-friendly tutorial](./Helpers/getmswpfeat/Tutorial_Feature%20Extraction%20Using%20Multisignal%20Wavelet%20Packet.pdf) is provided. [Link to MATLAB documentation here.](https://www.mathworks.com/matlabcentral/fileexchange/33146-feature-extraction-using-multisignal-wavelet-packet-decomposition)
 
+### clean_segments.m
+
+Given locations for maximum and minimums. Sweep through values to ensure maximums and minimums alternate for proper segmentation.
+
+### morph_features.m
+
+Given time, input signal, and peak values. Compute the morphological features as described in [1].
+
+### split_train_test.m
+
+Given sample data and labels. Split into train and test data/labels based on percentage. 
 
 ## References
 
