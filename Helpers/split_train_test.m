@@ -1,5 +1,5 @@
-function [train_data, test_data, train_labels, test_labels] = SplitTrainTest(data,labels, PD)
-%SPLITTRAINTEST Given sample data and labels. Split into train and test
+function [train_data, test_data, train_labels, test_labels] = split_train_test(data,labels, PD)
+%SPLIT_TRAIN_TEST Given sample data and labels. Split into train and test
 % data/labels based on percentage PD. 
 %   PD corresponds to percentage of data for training. The remainder will
 %   be for testing. The randperm function is used to randomize the

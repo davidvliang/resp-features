@@ -37,7 +37,7 @@ test_accuracies = zeros(runs,1);
 for i = 1:runs
 
     % Split Training and Test Data
-    [X_train, X_test, y_train, y_test] = SplitTrainTest(X, y, .70);
+    [X_train, X_test, y_train, y_test] = split_train_test(X, y, .70);
 
 
     % Train Model
@@ -52,4 +52,4 @@ for i = 1:runs
 
 end
 
-fprintf('\n--\nMean Test Accuracy: %f\n', mean(test_accuracies));
+fprintf('\n~~~~~\nMean Test Accuracy: %f\n', mean(test_accuracies));
