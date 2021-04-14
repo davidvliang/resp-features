@@ -1,6 +1,8 @@
 # resp-features
 
-.
+The purpose of this is to implement the feature generation method as described in [1]. The signal is split into "segments" and we extract 610 morphological and FWPT features from each segment. 
+
+Parts 0-5 of the general algorithm are implemented in *generate_features.m*. Parts 6-7 are implemented in *resp_classifier.m*. 
 
 ## General Algorithm
 
@@ -8,13 +10,15 @@
 1. Independent Component Analysis (ICA)
 2. Empirical Mode Decomposition (EMD) Filtering
 3. Segmentation
-4. Morphological Featuers
+4. Morphological Features
 5. Fuzzy Wavelet Packet Transform (FWPT) Features 
 6. SVM Classifier
 7. Model Evaluation
 
 
 ## generate_features.m
+
+### 0. Select Data
 
 ### 1. ICA
 
@@ -39,6 +43,10 @@ We generate create feature vectors out of "segments" of a signal. These segments
 ### 5. FWPT Features
 
 *Contributes a total of 510 features per segment.* 
+
+We used the same algorithm referenced in [1] that has been made publicly available by Khushaba in [2].
+
+The parameters window size (winsize) and window increment (wininc) are dependent on our dataset. For the results obtained in part 7, we set winsize = 256 and the wininc = 2. The 
 
 ## resp_classifier.m
 
