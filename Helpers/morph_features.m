@@ -1,6 +1,6 @@
 function [morph_matrix] = morph_features(time, input_sig, peak_vals)
-%MORPH_FEATURES Summary of this function goes here
-%   Detailed explanation goes here
+%MORPH_FEATURES Given time, input signal, and peak values. Compute the morphological 
+% features as described in [1]
 
 figure(2);
 % pause;
