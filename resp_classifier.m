@@ -1,10 +1,12 @@
 %% Clear Workspace 
+
 % close all;
 clear all;
 clc;
 
 
 %% Load Features
+
 load('fwpt_1_ws256_wi2.mat');
 load('fwpt_2_ws256_wi2.mat');
 load('morph_1.mat');
@@ -14,7 +16,7 @@ load('morph_2.mat');
 %% Format features (70-30 split) 
 
 % Define Labels
-label_definition = {1 , "src1"; 2, "src2";};
+labels = ["src1"; "src2"];
 
 % Gather All Features
 X = [
@@ -27,18 +29,21 @@ y = [
         2.*ones(size(fwpt_feat_2,1),1)
     ];
 
-% Split Training and Test Data
-[X_train, X_test, y_train, y_test] = SplitTrainTest(X, y, .70);
-
-
 %% Support Vector Machine (SVM)
 
-% model = fitcsvm(X_train, y_train, 'KernelFunction', 'polynomial', 'PolynomialOrder', 1);
-model = fitcsvm(X_train, y_train, 'KernelFunction', 'linear');
+for i = 1:100
+
+    % Split Training and Test Data
+    [X_train, X_test, y_train, y_test] = SplitTrainTest(X, y, .70);
 
 
-%% Performance Evaluation and ROC Curve
+    % Train Model
+    model = fitcsvm(X_train, y_train, 'KernelFunction', 'polynomial', 'PolynomialOrder', 2);
+%     model = fitcsvm(X_train, y_train, 'KernelFunction', 'linear');
 
-p = predict(model, X_test);
+    % Performance Evaluation and ROC Curve
+    [p, score] = predict(model, X_test);
+%     table(labels(y_test),labels(p), max(score,[],2),'VariableNames', {'TrueLabels','PredictedLabels','Score'});
+    fprintf('Test Accuracy: %f\n', mean(double(p == y_test)) * 100);
 
-fprintf('Test Accuracy: %f\n', mean(double(p == y_test)) * 100);
+end
