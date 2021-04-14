@@ -1,63 +1,44 @@
-%% Clear Workspace
-clc;
-close all;
+%% Clear Workspace 
+% close all;
 clear all;
-
-%% Import Data
-load('Data/data.mat')
-I1 = data2file(:,1);
-Q1 = data2file(:,2);
-I2 = data2file(:,3);
-Q2 = data2file(:,4);
-% CB1 = data2file(:,5);
-% CB2 = data2file(:,6);
-time = data2file(:,7);
-
-%% ICA
-stop = find(time==100, 1); % define the stopping time (default: 100seconds)
-
-% demodulate, ICA, and normalize
-[source1, source2] = IQ_ICA_func(I1(1:stop), Q1(1:stop), I2(1:stop), Q2(1:stop));
+clc;
 
 
-%% Segmentation
-[max1, max_loc1] = findpeaks(source1(1:stop),'MinPeakDistance', 20);
-[min_1, min_loc1] = findpeaks(-source1(1:stop),'MinPeakDistance', 20);
-
-figure;
-hold on;
-% plot(max_loc1, max1, 'o'); % doesn't work
-plot(time(1:stop), -source1(1:stop));
-plot(time(1:stop), -source2(1:stop));
-legend('src1', 'src2');
-hold off;
+%% Load Features
+load('fwpt_1_ws256_wi2.mat');
+load('fwpt_2_ws256_wi2.mat');
+load('morph_1.mat');
+load('morph_2.mat');
 
 
-
-
-%% Morphological Features
-
-
-
-
-%% Fuzzy Wavelet Packet Transform Algorithm (FWPT) Features
-
-% Features = getmswpfeat(x,winsize,wininc,J,toolbox); %unfinished
-
-
-%% Format features (70-30 split)
+%% Format features (70-30 split) 
 
 % Define Labels
 label_definition = {1 , "src1"; 2, "src2";};
+
+% Gather All Features
+X = [
+        fwpt_feat_1, morph_feat_1;
+        fwpt_feat_2, morph_feat_2
+    ];
+
+y = [
+        ones(size(fwpt_feat_1,1),1); 
+        2.*ones(size(fwpt_feat_2,1),1)
+    ];
 
 % Split Training and Test Data
 [X_train, X_test, y_train, y_test] = SplitTrainTest(X, y, .70);
 
 
-% Support Vector Machine (SVM)
+%% Support Vector Machine (SVM)
 
+% model = fitcsvm(X_train, y_train, 'KernelFunction', 'polynomial', 'PolynomialOrder', 1);
+model = fitcsvm(X_train, y_train, 'KernelFunction', 'linear');
 
 
 %% Performance Evaluation and ROC Curve
 
+p = predict(model, X_test);
 
+fprintf('Test Accuracy: %f\n', mean(double(p == y_test)) * 100);
