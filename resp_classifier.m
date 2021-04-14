@@ -30,8 +30,11 @@ y = [
     ];
 
 %% Support Vector Machine (SVM)
+runs = 100;
 
-for i = 1:100
+test_accuracies = zeros(runs,1);
+
+for i = 1:runs
 
     % Split Training and Test Data
     [X_train, X_test, y_train, y_test] = SplitTrainTest(X, y, .70);
@@ -44,6 +47,9 @@ for i = 1:100
     % Performance Evaluation and ROC Curve
     [p, score] = predict(model, X_test);
 %     table(labels(y_test),labels(p), max(score,[],2),'VariableNames', {'TrueLabels','PredictedLabels','Score'});
-    fprintf('Test Accuracy: %f\n', mean(double(p == y_test)) * 100);
+    test_accuracies(i) = mean(double(p == y_test)) * 100;
+    fprintf('Test Accuracy: %f\n', test_accuracies(i));
 
 end
+
+fprintf('\n--\nMean Test Accuracy: %f\n', mean(test_accuracies));
